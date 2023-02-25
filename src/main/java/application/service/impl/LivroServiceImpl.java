@@ -28,7 +28,7 @@ public class LivroServiceImpl implements LivroService {
 
     @Override
     public Optional<Livro> getById(Long id) {
-        return Optional.empty();
+        return livroRepository.findById(id);
     }
 
     @Override
