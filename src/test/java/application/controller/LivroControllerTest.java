@@ -24,6 +24,8 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Optional;
+
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -103,6 +105,52 @@ public class LivroControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("errors", Matchers.hasSize(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("errors[0]").value(mensagemErro));
+    }
+
+    @Test
+    @DisplayName("Deve obter detalhes de um livro especifico")
+    public void obterDetalhesDeUmLivroTest() throws Exception {
+
+        //Cenario
+        Long id = 1l;
+        Livro livro = Livro.builder()
+                .id(id)
+                .titulo(salvandoNovoLivro().getTitulo())
+                .autor(salvandoNovoLivro().getAutor())
+                .isbn(salvandoNovoLivro().getIsbn())
+                .build();
+
+        BDDMockito.given(service.getById(id)).willReturn(Optional.of(livro));
+
+        //execucao
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(BOOK_API.concat("/" + id))
+                .accept(MediaType.APPLICATION_JSON);
+
+        //Verificacao
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("titulo").value(salvandoNovoLivro().getTitulo()))
+                .andExpect(MockMvcResultMatchers.jsonPath("autor").value(salvandoNovoLivro().getAutor()))
+                .andExpect(MockMvcResultMatchers.jsonPath("isbn").value(salvandoNovoLivro().getIsbn()));
+
+
+    }
+
+    @Test
+    @DisplayName("Deve retornar um not found quando o livro procurado não existir!")
+    public void livroNaoEncontradoTeste() throws Exception{
+
+
+        BDDMockito.given(service.getById(Mockito.anyLong())).willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(BOOK_API.concat("/" + 1))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     private LivroDTO salvandoNovoLivro() {

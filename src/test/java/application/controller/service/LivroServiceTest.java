@@ -1,11 +1,10 @@
 package application.controller.service;
 
-import application.DTO.LivroDTO;
 import application.Exception.BusinessException;
 import application.entities.Livro;
 import application.repositories.LivroRepository;
 import application.service.LivroService;
-import application.service.LivroServiceImpl;
+import application.service.impl.LivroServiceImpl;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
