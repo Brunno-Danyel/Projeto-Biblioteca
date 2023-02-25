@@ -110,6 +110,28 @@ public class LivroServiceTest {
 
     }
 
+    @Test
+    @DisplayName("Deve deletar um livro")
+    public void deletarLivroTeste() {
+
+        Livro livro = Livro.builder().id(1l).build();
+
+        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> service.delete(livro));
+
+        Mockito.verify(livroRepository, Mockito.times(1)).delete(livro);
+
+    }
+
+    @Test
+    @DisplayName("Deve ocorrer um erro ao tentar deletar um livro inexistente")
+    public void deletarLivroInexistenteTeste(){
+        Livro livro = new Livro();
+
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> service.delete(livro));
+
+        Mockito.verify(livroRepository, Mockito.never()).delete(livro);
+    }
+
     private Livro livroValido() {
         return Livro.builder().autor("Brunno Danyel").isbn("12345").titulo("A noite estrelada").build();
     }
