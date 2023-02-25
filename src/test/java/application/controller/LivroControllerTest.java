@@ -43,7 +43,7 @@ public class LivroControllerTest {
 
     @Test
     @DisplayName("Deve criar um livro com sucesso")
-    public void salvandoLivroTest() throws Exception {
+    public void salvandoLivroTeste() throws Exception {
 
         LivroDTO dto = salvandoNovoLivro();
 
@@ -70,7 +70,7 @@ public class LivroControllerTest {
 
     @Test
     @DisplayName("Deve lançar erro de validação quando não houver dados suficiente para criação do livro")
-    public void salvandoLivroInvalidoTest() throws Exception {
+    public void salvandoLivroInvalidoTeste() throws Exception {
 
 
         String json = new ObjectMapper().writeValueAsString(new LivroDTO());
@@ -88,7 +88,7 @@ public class LivroControllerTest {
 
     @Test
     @DisplayName("Deve lançar um erro ao tentar cadastrar livro com isbn já cadastrado")
-    public void salvarLivroComIsbnDuplicado() throws Exception {
+    public void salvarLivroComIsbnDuplicadoTeste() throws Exception {
 
         LivroDTO dto = salvandoNovoLivro();
         String json = new ObjectMapper().writeValueAsString(dto);
@@ -109,7 +109,7 @@ public class LivroControllerTest {
 
     @Test
     @DisplayName("Deve obter detalhes de um livro especifico")
-    public void obterDetalhesDeUmLivroTest() throws Exception {
+    public void obterDetalhesDeUmLivroTeste() throws Exception {
 
         //Cenario
         Long id = 1l;
@@ -140,7 +140,7 @@ public class LivroControllerTest {
 
     @Test
     @DisplayName("Deve retornar um not found quando o livro procurado não existir!")
-    public void livroNaoEncontradoTeste() throws Exception{
+    public void livroNaoEncontradoTeste() throws Exception {
 
 
         BDDMockito.given(service.getById(Mockito.anyLong())).willReturn(Optional.empty());
@@ -148,6 +148,32 @@ public class LivroControllerTest {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(BOOK_API.concat("/" + 1))
                 .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve fazer uma deleção de um livro")
+    public void deletarLivroTeste() throws Exception {
+
+        BDDMockito.given(service.getById(Mockito.anyLong())).willReturn(Optional.of(Livro.builder().id(1l).build()));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete(BOOK_API.concat("/" + 1));
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("Deve retornar um not found caso o livro para deleção não for encontrado")
+    public void deletarLivroExceptionTeste() throws Exception {
+
+        BDDMockito.given(service.getById(Mockito.anyLong())).willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete(BOOK_API.concat("/" + 1));
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isNotFound());

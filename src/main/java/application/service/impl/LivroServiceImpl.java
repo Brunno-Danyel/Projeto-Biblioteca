@@ -30,4 +30,9 @@ public class LivroServiceImpl implements LivroService {
     public Optional<Livro> getById(Long id) {
         return Optional.empty();
     }
+
+    @Override
+    public void delete(Livro livro) {
+
+    }
 }

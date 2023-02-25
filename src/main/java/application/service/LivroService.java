@@ -11,4 +11,6 @@ public interface LivroService {
     Livro save(Livro any);
 
     Optional<Livro> getById(Long id);
+
+    void delete(Livro livro);
 }
