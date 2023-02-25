@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -52,5 +54,23 @@ public class LivroRepositoryTest {
 
         //verificacao
         assertThat(existente).isFalse();
+    }
+
+    @Test
+    @DisplayName("Deve retornar um livro por id")
+    public void findByIdTeste(){
+
+        Livro livro = livroSalvo();
+        entityManager.persist(livro);
+
+        Optional<Livro> livroId = livroRepository.findById(livro.getId());
+
+        assertThat(livroId.isPresent()).isTrue();
+
+    }
+
+
+    public Livro livroSalvo(){
+        return Livro.builder().autor("Brunno Danyel").isbn("001").titulo("A noite estrelada").build();
     }
 }
