@@ -35,4 +35,11 @@ public class LivroServiceImpl implements LivroService {
     public void delete(Livro livro) {
 
     }
+
+    @Override
+    public Livro atualizar(Livro livro) {
+        return null;
+    }
+
+
 }

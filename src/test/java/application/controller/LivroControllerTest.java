@@ -179,6 +179,52 @@ public class LivroControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
+    @Test
+    @DisplayName("Deve atualizar um livro")
+    public void atualizarLivroTeste() throws Exception {
+
+        Long id = 1l;
+        String json = new ObjectMapper().writeValueAsString(salvandoNovoLivro());
+
+        Livro atualizandoLivro = Livro.builder().id(1l).autor("Andressa Ferreira").titulo("A noite estrelada 2").isbn("001").build();
+        BDDMockito.given(service.getById(id)).willReturn(Optional.of(atualizandoLivro));
+
+        Livro livroAtualizado = Livro.builder().id(id).autor("Brunno").titulo("A noite estrelada").isbn("001").build();
+        BDDMockito.given(service.atualizar(atualizandoLivro)).willReturn(livroAtualizado);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put(BOOK_API.concat("/" + 1))
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("titulo").value(salvandoNovoLivro().getTitulo()))
+                .andExpect(MockMvcResultMatchers.jsonPath("autor").value(salvandoNovoLivro().getAutor()))
+                .andExpect(MockMvcResultMatchers.jsonPath("isbn").value("001"));
+    }
+
+
+    @Test
+    @DisplayName("Deve retornar um not found caso o livro para a atualização não for encontrado um livro")
+    public void atualizarLivroExceptionTeste() throws Exception {
+
+        String json = new ObjectMapper().writeValueAsString(salvandoNovoLivro());
+        BDDMockito.given(service.getById(Mockito.anyLong())).willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put(BOOK_API.concat("/" + 1))
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
+    }
+
     private LivroDTO salvandoNovoLivro() {
         return LivroDTO.builder().autor("Brunno").titulo("A noite estrelada").isbn("12345").build();
     }
