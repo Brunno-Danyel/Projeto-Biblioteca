@@ -15,4 +15,7 @@ public interface LivroService {
     void delete(Livro livro);
 
     Livro atualizar(Livro livro);
+
+    Optional<Livro> getLivroByIsbn(String isbn);
+
 }

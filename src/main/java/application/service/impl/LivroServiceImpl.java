@@ -20,7 +20,7 @@ public class LivroServiceImpl implements LivroService {
 
     @Override
     public Livro save(Livro livro) {
-        if(livroRepository.existsByIsbn(livro.getIsbn())) {
+        if (livroRepository.existsByIsbn(livro.getIsbn())) {
             throw new BusinessException("Isbn já cadastrado");
         }
         return livroRepository.save(livro);
@@ -33,7 +33,7 @@ public class LivroServiceImpl implements LivroService {
 
     @Override
     public void delete(Livro livro) {
-        if(livro == null || livro.getId() == null){
+        if (livro == null || livro.getId() == null) {
             throw new IllegalArgumentException("ID do livro não pode ser nulo");
         }
         livroRepository.delete(livro);
@@ -41,10 +41,15 @@ public class LivroServiceImpl implements LivroService {
 
     @Override
     public Livro atualizar(Livro livro) {
-        if(livro == null || livro.getId() == null){
+        if (livro == null || livro.getId() == null) {
             throw new IllegalArgumentException("ID do livro não pode ser nulo");
         }
-       return livroRepository.save(livro);
+        return livroRepository.save(livro);
+    }
+
+    @Override
+    public Optional<Livro> getLivroByIsbn(String isbn) {
+        return Optional.empty();
     }
 
 

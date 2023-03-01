@@ -27,14 +27,14 @@ public class LivroController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public LivroDTO salvarLivros(@RequestBody @Valid LivroDTO livroDTO){
-     Livro livro = modelMapper.map(livroDTO, Livro.class);
-     livro = service.save(livro);
-     return modelMapper.map(livro, LivroDTO.class);
+    public LivroDTO salvarLivros(@RequestBody @Valid LivroDTO livroDTO) {
+        Livro livro = modelMapper.map(livroDTO, Livro.class);
+        livro = service.save(livro);
+        return modelMapper.map(livro, LivroDTO.class);
     }
 
     @GetMapping("{id}")
-    public LivroDTO getLivro(@PathVariable Long id){
+    public LivroDTO getLivro(@PathVariable Long id) {
         return service
                 .getById(id)
                 .map(livro -> modelMapper.map(livro, LivroDTO.class))
@@ -43,13 +43,13 @@ public class LivroController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletarLivro(@PathVariable Long id){
+    public void deletarLivro(@PathVariable Long id) {
         Livro livro = service.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         service.delete(livro);
     }
 
     @PutMapping("{id}")
-    public LivroDTO atualizarLivro(@PathVariable Long id, LivroDTO dto){
+    public LivroDTO atualizarLivro(@PathVariable Long id, LivroDTO dto) {
         Livro livro = service.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         livro.setAutor(dto.getAutor());
         livro.setTitulo(dto.getTitulo());
@@ -57,17 +57,5 @@ public class LivroController {
         return modelMapper.map(livro, LivroDTO.class);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiErros handleValidationException(MethodArgumentNotValidException ex) {
-        BindingResult bindingResult = ex.getBindingResult();
-        return new ApiErros(bindingResult);
-    }
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(BusinessException.class)
-    public ApiErros handleBusinessException(BusinessException ex) {
-        return new ApiErros(ex);
-    }
 
 }

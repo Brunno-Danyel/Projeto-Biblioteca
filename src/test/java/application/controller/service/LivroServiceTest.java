@@ -124,12 +124,43 @@ public class LivroServiceTest {
 
     @Test
     @DisplayName("Deve ocorrer um erro ao tentar deletar um livro inexistente")
-    public void deletarLivroInexistenteTeste(){
+    public void deletarLivroInexistenteTeste() {
         Livro livro = new Livro();
 
         org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> service.delete(livro));
 
         Mockito.verify(livroRepository, Mockito.never()).delete(livro);
+    }
+
+    @Test
+    @DisplayName("Deve ocorrer erro ao tentar atualizar um livro inexistente")
+    public void atualizarLivroInvalidoTeste() {
+        Livro livro = new Livro();
+
+        org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class, () -> service.atualizar(livro));
+
+        Mockito.verify(livroRepository, Mockito.never()).save(livro);
+
+    }
+
+    @Test
+    @DisplayName("Deve atualizar um livro")
+    public void atualizarLivroTeste(){
+
+        Long id = 1l;
+        Livro atualizandoLivro = Livro.builder().id(id).build();
+
+        Livro livroAtualizado = livroValido();
+        livroAtualizado.setId(id);
+
+        Mockito.when(livroRepository.save(atualizandoLivro)).thenReturn(livroAtualizado);
+
+        Livro livro = service.atualizar(atualizandoLivro);
+
+        assertThat(livro.getId()).isEqualTo(livroAtualizado.getId());
+        assertThat(livro.getTitulo()).isEqualTo(livroAtualizado.getTitulo());
+        assertThat(livro.getIsbn()).isEqualTo(livroAtualizado.getIsbn());
+        assertThat(livro.getAutor()).isEqualTo(livroAtualizado.getAutor());
     }
 
     private Livro livroValido() {
