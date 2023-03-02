@@ -1,6 +1,7 @@
 package application.controller;
 
 import application.DTO.EmprestimoDTO;
+import application.DTO.RetornoLivroDTO;
 import application.entities.Emprestimo;
 import application.entities.Livro;
 import application.service.EmprestimoService;
@@ -34,5 +35,13 @@ public class EmprestimoController {
 
         emprestimoService.save(emprestimo);
         return emprestimo.getId();
+    }
+
+    @PatchMapping("{id}")
+    public void retornoDoLivro(@PathVariable Long id, @RequestBody RetornoLivroDTO retornoLivroDTO){
+        Emprestimo emprestimo = emprestimoService.getById(id).get();
+        emprestimo.setRetornoDoLivro(retornoLivroDTO.getRetornoDoLivro());
+
+        emprestimoService.atualizar(emprestimo);
     }
 }
