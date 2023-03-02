@@ -5,15 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class EmprestimoDTO {
+public class EmprestimoFilterDTO {
 
     private String isbn;
+    private String customer;
 
-    private String cliente;
-
-    private LivroDTO livroDTO;
 }

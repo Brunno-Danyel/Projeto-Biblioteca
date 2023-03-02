@@ -1,17 +1,25 @@
 package application.controller;
 
 import application.DTO.EmprestimoDTO;
+import application.DTO.EmprestimoFilterDTO;
+import application.DTO.LivroDTO;
 import application.DTO.RetornoLivroDTO;
 import application.entities.Emprestimo;
 import application.entities.Livro;
 import application.service.EmprestimoService;
 import application.service.LivroService;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/emprestimo")
@@ -21,6 +29,8 @@ public class EmprestimoController {
     private LivroService livroService;
 
     private EmprestimoService emprestimoService;
+
+    private ModelMapper modelMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -49,5 +59,23 @@ public class EmprestimoController {
     public Emprestimo buscaEmprestimo(@PathVariable Long id){
         Emprestimo emprestimo = emprestimoService.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Emprestimo não econtrado"));
         return emprestimo;
+    }
+
+    @GetMapping
+    Page<EmprestimoDTO> find(EmprestimoFilterDTO dto, PageRequest pageRequest){
+        Page<Emprestimo> result = emprestimoService.find(dto, pageRequest);
+        List<EmprestimoDTO> emprestimos = result
+                .getContent()
+                .stream()
+                .map(entity -> {
+
+                    Livro livro = entity.getLivro();
+                    LivroDTO livroDTO = modelMapper.map(livro, LivroDTO.class);
+                    EmprestimoDTO emprestimoDTO = modelMapper.map(entity, EmprestimoDTO.class);
+                    emprestimoDTO.setLivroDTO(livroDTO);
+                    return emprestimoDTO;
+                
+                }).collect(Collectors.toList());
+        return new PageImpl<EmprestimoDTO>(emprestimos, pageRequest, result.getTotalElements());
     }
 }

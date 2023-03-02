@@ -1,10 +1,13 @@
 package application.service.impl;
 
+import application.DTO.EmprestimoFilterDTO;
 import application.Exception.BusinessException;
 import application.entities.Emprestimo;
 import application.repositories.EmprestimoRespository;
 import application.service.EmprestimoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -28,5 +31,10 @@ public class EmprestimoServiceImpl implements EmprestimoService {
     @Override
     public Emprestimo atualizar(Emprestimo emprestimo) {
         return emprestimoRespository.save(emprestimo);
+    }
+
+    @Override
+    public Page<Emprestimo> find(EmprestimoFilterDTO filterDTO, Pageable pageable) {
+        return null;
     }
 }
