@@ -26,7 +26,7 @@ public class EmprestimoController {
     @ResponseStatus(HttpStatus.CREATED)
     public Long criarEmprestimo(@RequestBody EmprestimoDTO emprestimoDTO){
         Livro livro = livroService.getLivroByIsbn(emprestimoDTO.getIsbn())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Livro não encontrado!"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Livro não encontrado!"));
         Emprestimo emprestimo = Emprestimo.builder()
                 .livro(livro)
                 .dataEmprestimo(LocalDate.now())
@@ -39,9 +39,15 @@ public class EmprestimoController {
 
     @PatchMapping("{id}")
     public void retornoDoLivro(@PathVariable Long id, @RequestBody RetornoLivroDTO retornoLivroDTO){
-        Emprestimo emprestimo = emprestimoService.getById(id).get();
+        Emprestimo emprestimo = emprestimoService.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Emprestimo não encontrado!"));
         emprestimo.setRetornoDoLivro(retornoLivroDTO.getRetornoDoLivro());
 
         emprestimoService.atualizar(emprestimo);
+    }
+
+    @GetMapping("{id}")
+    public Emprestimo buscaEmprestimo(@PathVariable Long id){
+        Emprestimo emprestimo = emprestimoService.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Emprestimo não econtrado"));
+        return emprestimo;
     }
 }
