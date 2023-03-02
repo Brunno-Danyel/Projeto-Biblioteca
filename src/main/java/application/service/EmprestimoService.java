@@ -1,9 +1,7 @@
 package application.service;
 
 import application.entities.Emprestimo;
-import application.entities.Livro;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface EmprestimoService {
