@@ -5,18 +5,24 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Emprestimo {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String cliente;
 
+    @JoinColumn(name = "id_livro")
+    @ManyToOne
     private Livro livro;
 
     private LocalDate dataEmprestimo;
