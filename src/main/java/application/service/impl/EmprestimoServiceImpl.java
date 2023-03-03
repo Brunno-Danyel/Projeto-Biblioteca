@@ -1,8 +1,9 @@
 package application.service.impl;
 
-import application.DTO.EmprestimoFilterDTO;
+import application.dto.EmprestimoFilterDTO;
 import application.Exception.BusinessException;
 import application.entities.Emprestimo;
+import application.entities.Livro;
 import application.repositories.EmprestimoRespository;
 import application.service.EmprestimoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,11 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 
     @Override
     public Page<Emprestimo> find(EmprestimoFilterDTO filterDTO, Pageable pageable) {
+        return emprestimoRespository.findByLivroIsbnOrCliente(filterDTO.getIsbn(), filterDTO.getCustomer(), pageable);
+    }
+
+    @Override
+    public Page<Emprestimo> getEmprestimosByLivros(Livro livro, Pageable pageable) {
         return null;
     }
 }

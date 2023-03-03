@@ -1,10 +1,9 @@
 package application.controller;
 
-import application.DTO.LivroDTO;
+import application.dto.LivroDTO;
 import application.Exception.BusinessException;
 import application.entities.Livro;
 import application.service.LivroService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;

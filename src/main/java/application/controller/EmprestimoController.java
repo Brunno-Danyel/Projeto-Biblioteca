@@ -1,9 +1,9 @@
 package application.controller;
 
-import application.DTO.EmprestimoDTO;
-import application.DTO.EmprestimoFilterDTO;
-import application.DTO.LivroDTO;
-import application.DTO.RetornoLivroDTO;
+import application.dto.EmprestimoDTO;
+import application.dto.EmprestimoFilterDTO;
+import application.dto.LivroDTO;
+import application.dto.RetornoLivroDTO;
 import application.entities.Emprestimo;
 import application.entities.Livro;
 import application.service.EmprestimoService;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/emprestimo")
+@RequestMapping("/api/emprestimo")
 @AllArgsConstructor
 public class EmprestimoController {
 
@@ -74,7 +74,7 @@ public class EmprestimoController {
                     EmprestimoDTO emprestimoDTO = modelMapper.map(entity, EmprestimoDTO.class);
                     emprestimoDTO.setLivroDTO(livroDTO);
                     return emprestimoDTO;
-                
+
                 }).collect(Collectors.toList());
         return new PageImpl<EmprestimoDTO>(emprestimos, pageRequest, result.getTotalElements());
     }

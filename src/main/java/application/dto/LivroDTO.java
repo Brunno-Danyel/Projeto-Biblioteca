@@ -1,4 +1,4 @@
-package application.DTO;
+package application.dto;
 
 import lombok.*;
 

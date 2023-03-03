@@ -1,19 +1,23 @@
 package application.controller;
 
-import application.DTO.LivroDTO;
-import application.Exception.ApiErros;
-import application.Exception.BusinessException;
+import application.dto.EmprestimoDTO;
+import application.dto.LivroDTO;
+import application.entities.Emprestimo;
 import application.entities.Livro;
+import application.service.EmprestimoService;
 import application.service.LivroService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/livros")
@@ -21,6 +25,9 @@ public class LivroController {
 
     @Autowired
     LivroService service;
+
+    @Autowired
+    EmprestimoService emprestimoService;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -57,5 +64,21 @@ public class LivroController {
         return modelMapper.map(livro, LivroDTO.class);
     }
 
+    @GetMapping("{id}/emprestimos")
+    public Page<EmprestimoDTO> emprestimosByLivro(@PathVariable Long id, Pageable pageable) {
+        Livro livro = service.getById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Page<Emprestimo> result = emprestimoService.getEmprestimosByLivros(livro, pageable);
+        List<EmprestimoDTO> list = result.getContent()
+                .stream()
+                .map(emprestimos -> {
+                        Livro emprestimoLivro = emprestimos.getLivro();
+                        LivroDTO livroDTO = modelMapper.map(emprestimoLivro, LivroDTO.class);
+                        EmprestimoDTO emprestimoDTO = modelMapper.map(emprestimos, EmprestimoDTO.class);
+                        emprestimoDTO.setLivroDTO(livroDTO);
+                        return emprestimoDTO;
+        }).collect(Collectors.toList());
+        return new PageImpl<EmprestimoDTO>(list, pageable, result.getTotalElements());
+
+    }
 
 }

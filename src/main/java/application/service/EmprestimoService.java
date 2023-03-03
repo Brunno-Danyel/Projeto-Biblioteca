@@ -1,7 +1,8 @@
 package application.service;
 
-import application.DTO.EmprestimoFilterDTO;
+import application.dto.EmprestimoFilterDTO;
 import application.entities.Emprestimo;
+import application.entities.Livro;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,4 +17,6 @@ public interface EmprestimoService {
     Emprestimo atualizar(Emprestimo emprestimo);
 
     Page<Emprestimo> find(EmprestimoFilterDTO filterDTO, Pageable pageable);
+
+    Page<Emprestimo> getEmprestimosByLivros(Livro livro, Pageable pageable);
 }
