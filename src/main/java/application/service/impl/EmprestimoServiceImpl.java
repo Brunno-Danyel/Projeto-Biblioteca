@@ -58,4 +58,6 @@ public class EmprestimoServiceImpl implements EmprestimoService {
         LocalDate tresDiasAtras = LocalDate.now().minusDays(EmprestimosDiasDeAtrasos);
         return emprestimoRespository.findByDataEmprestimoLessThanAndNotReturne(tresDiasAtras);
     }
+
+
 }
