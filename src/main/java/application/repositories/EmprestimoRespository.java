@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
+import java.util.List;
+
 
 public interface EmprestimoRespository extends JpaRepository<Emprestimo, Long> {
 
@@ -19,4 +22,7 @@ public interface EmprestimoRespository extends JpaRepository<Emprestimo, Long> {
     Page<Emprestimo> findByLivroIsbnOrCliente(@Param("isbn") String isbn, @Param("cliente") String cliente, Pageable pageable);
 
     Page<Emprestimo> findByLivro(Livro livro, Pageable pageable);
+
+    @Query(value = "select e from Emprestimo e where e.dataEmprestimo <=:tresDiasAtras and (e.retornoDoLivro is null or e.retornoDoLivro is false)")
+    List<Emprestimo> findByDataEmprestimoLessThanAndNotReturne(@Param("tresDiasAtras") LocalDate tresDiasAtras);
 }

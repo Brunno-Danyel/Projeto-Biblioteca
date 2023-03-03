@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,5 +50,12 @@ public class EmprestimoServiceImpl implements EmprestimoService {
     @Override
     public Page<Emprestimo> getEmprestimosByLivros(Livro livro, Pageable pageable) {
         return emprestimoRespository.findByLivro(livro, pageable);
+    }
+
+    @Override
+    public List<Emprestimo> buscarTodosEmprestimosAtrasados() {
+        final Integer EmprestimosDiasDeAtrasos = 4;
+        LocalDate tresDiasAtras = LocalDate.now().minusDays(EmprestimosDiasDeAtrasos);
+        return emprestimoRespository.findByDataEmprestimoLessThanAndNotReturne(tresDiasAtras);
     }
 }

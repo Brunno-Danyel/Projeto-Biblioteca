@@ -11,6 +11,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmprestimoDTO {
 
+    private Long id;
+
+    private String email;
+
     private String isbn;
 
     private String cliente;

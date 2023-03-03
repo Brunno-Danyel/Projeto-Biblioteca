@@ -21,6 +21,8 @@ public class Emprestimo {
 
     private String cliente;
 
+    private String clienteEmail;
+
     @JoinColumn(name = "id_livro")
     @ManyToOne
     private Livro livro;
