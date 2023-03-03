@@ -41,6 +41,6 @@ public class EmprestimoServiceImpl implements EmprestimoService {
 
     @Override
     public Page<Emprestimo> getEmprestimosByLivros(Livro livro, Pageable pageable) {
-        return null;
+        return emprestimoRespository.findByLivro(livro, pageable);
     }
 }

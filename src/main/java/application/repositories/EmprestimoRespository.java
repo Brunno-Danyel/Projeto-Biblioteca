@@ -17,4 +17,6 @@ public interface EmprestimoRespository extends JpaRepository<Emprestimo, Long> {
 
     @Query(value = "select e from emprestimo as e join e.livro as l where l.isbn = :isbn or e.clientes =:clientes")
     Page<Emprestimo> findByLivroIsbnOrCliente(@Param("isbn") String isbn, @Param("clientes") String clientes, Pageable pageable);
+
+    Page<Emprestimo> findByLivro(Livro livro, Pageable pageable);
 }
