@@ -1,7 +1,7 @@
 package application.service.impl;
 
-import application.dto.EmprestimoFilterDTO;
 import application.Exception.BusinessException;
+import application.dto.EmprestimoFilterDTO;
 import application.entities.Emprestimo;
 import application.entities.Livro;
 import application.repositories.EmprestimoRespository;
@@ -9,13 +9,19 @@ import application.service.EmprestimoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class EmprestimoServiceImpl implements EmprestimoService {
 
-    @Autowired
+
     private EmprestimoRespository emprestimoRespository;
+
+    public EmprestimoServiceImpl(EmprestimoRespository emprestimoRespository) {
+        this.emprestimoRespository = emprestimoRespository;
+    }
 
     public Emprestimo save(Emprestimo emprestimo){
        if(emprestimoRespository.existsByLivroAndNotRetornoDoLivro(emprestimo.getLivro())){

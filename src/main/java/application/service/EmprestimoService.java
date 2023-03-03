@@ -8,9 +8,10 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
+
 public interface EmprestimoService {
 
-    Emprestimo save(Emprestimo any);
+    Emprestimo save(Emprestimo emprestimo);
 
     Optional<Emprestimo> getById(Long id);
 

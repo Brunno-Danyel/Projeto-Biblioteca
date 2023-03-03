@@ -9,7 +9,9 @@ import application.entities.Livro;
 import application.service.EmprestimoService;
 import application.service.LivroService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -23,14 +25,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/emprestimo")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EmprestimoController {
 
-    private LivroService livroService;
 
-    private EmprestimoService emprestimoService;
-
-    private ModelMapper modelMapper;
+    private final LivroService livroService;
+    private final EmprestimoService emprestimoService;
+    private final ModelMapper modelMapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

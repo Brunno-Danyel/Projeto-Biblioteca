@@ -12,11 +12,13 @@ import java.util.Optional;
 @Service
 public class LivroServiceImpl implements LivroService {
 
+    @Autowired
     private LivroRepository livroRepository;
 
     public LivroServiceImpl(LivroRepository livroRepository) {
         this.livroRepository = livroRepository;
     }
+
 
     @Override
     public Livro save(Livro livro) {
